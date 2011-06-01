@@ -16,15 +16,15 @@
 %\usepackage{subfig}
 
 % Titel der Arbeit
-\title{Seminarausarbeitung}
+\title{Peer-To-Peer in Botnets}
 
 % Angaben zum Author
-\author{Vorname Nachname}
+\author{Moritz Marc Beller,\\Ben Nachname}
 \institute{%
    Fakultät für Informatik, \\
    Technische Universität München \\
 %    Munich, Germany\\
-   \email{email@in.tum.de}
+   \email{\{beller,bennachname\}@in.tum.de}
 }
 
 \pagestyle{plain}
@@ -42,10 +42,53 @@ Diese Arbeit behandelt ein interessantes Thema.
 %------------------------------------------------------------------------------
 \section{Einleitung}
 
-Für diese Arbeit ist das Papier \cite{Popek1974} relevant.
+
+
+\section{Definitions}
+A computer able of executing remotely-triggered commands is called a {\it bot} or {\it zombie.} A {\it botnet} is a group of bots forming a common network structure.\cite{schoof2007detecting} In most recent papers on the subject (\cite{wang2009systematic}, \cite{abu2006multifaceted}), the term botnet is defined as purely negative, i.e. a network performing destructive aims such as DDoS attacks, sending spam or hosting a phishing website\cite{steggink2007detection}. We'd like to propose a bias-free definition of botnet as per our understanding technology is generally ethics-free. Additionally, there are many examples where botnets are used in a non-destructive way (e.g. \cite{seti}), or even to destroy existing ``evil-minded'' botnets.
+
+A {\it botmaster} is referred to as the controller of the botnet. This doesn't necessarily have to be the founder of the botnet.
+
+The expression {\it bot candidates} specifies the set of computers
+which are target to becoming a bot themselves.
+
+{\it Peer-to-Peer}, being a technology buzz word of the internet in
+the late 1990s with file sharing services like Napster\cite{napster},
+has attracted less attention in recent years. {\it P2P } defines an
+unstructured information network amongst equals --- so-called
+peers. Two or more peers can spontaneously exchange information
+without a central instance. According to \cite{schoder2005core} ``P2P
+networks promise improved scalability, lower cost of ownership,
+self-organized and decentralized coordination of previously underused
+or limited resources, greater fault toler- ance, and better support
+for building ad hoc networks.''  These properties coupled with the
+fact that files circumfloating in P2P networks are prone to malware,
+trojans and viruses make P2P networks a most-attractive base for
+building botnets.  Well-known P2P networks include the
+Napster\cite{napster}, Gnutella, Overnet and Torrent network.
+
+The so-called {\it C\&C}, command and controll structure, specifies
+the way and protocols in which the botmaster and the bots communicate
+to each other. It is the central property of any botnet.
+
+{\it IRC} --- internet relay chat --- is a ``teleconferencing
+system''\cite{irc}, typically used for text chatting in channels
+joined by a large number of participants. While its protocol is
+relatively easy to implement, it provides a lot of features. It has
+thus become the de-facto standard for conventional botnets.
+
+The process of {\it bootstrapping} generally describes starting a more
+complex system ontop of a simple system. In regard to botnets, the
+term usually means loading of the bot code (often injected into the
+original filesharing program) and establishing a connection to other
+bots.\cite{wang2009systematic}
+
+
 
 %------------------------------------------------------------------------------
 \bibliographystyle{alpha}
-\bibliography{literature.bib}
+\bibliography{literature}
+
+
 
 \end{document}
