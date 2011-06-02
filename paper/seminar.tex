@@ -45,9 +45,23 @@ Diese Arbeit behandelt ein interessantes Thema.
 
 
 \section{Definitions}
-A computer able of executing remotely-triggered commands is called a {\it bot} or {\it zombie.} A {\it botnet} is a group of bots forming a common network structure.\cite{schoof2007detecting} In most recent papers on the subject (\cite{wang2009systematic}, \cite{abu2006multifaceted}), the term botnet is defined as purely negative, i.e. a network performing destructive aims such as DDoS attacks, sending spam or hosting a phishing website\cite{steggink2007detection}. We'd like to propose a bias-free definition of botnet as per our understanding technology is generally ethics-free. Additionally, there are many examples where botnets are used in a non-destructive way (e.g. \cite{seti}), or even to destroy existing ``evil-minded'' botnets.
+A computer able of executing remotely-triggered commands is called a
+{\it bot} or {\it zombie.} A {\it botnet} is a group of bots forming a
+common network structure.\cite{schoof2007detecting} In most recent
+papers on the subject (\cite{wang2009systematic},
+\cite{abu2006multifaceted}), the term botnet is defined as purely
+negative, i.e. a network performing destructive aims such as DDoS
+attacks, sending spam or hosting a phishing
+website\cite{steggink2007detection}. A common aim is to provide the
+aggregated CPU resources of the botnet, or stealing user's
+credentials. \cite{borgaonkar2010analysis} We'd like to propose a
+bias-free definition of botnet as per our understanding technology is
+generally ethics-free. Additionally, there are many examples where
+botnets are used in a non-destructive way (e.g. \cite{seti}), or even
+to destroy existing ``evil-minded'' botnets.
 
-A {\it botmaster} is referred to as the controller of the botnet. This doesn't necessarily have to be the founder of the botnet.
+A {\it botmaster} is referred to as the controller of the botnet. This
+doesn't necessarily have to be the founder of the botnet (cf. \ref{ClassificP2P}).
 
 The expression {\it bot candidates} specifies the set of computers
 which are target to becoming a bot themselves.
@@ -69,13 +83,14 @@ Napster\cite{napster}, Gnutella, Overnet and Torrent network.
 
 The so-called {\it C\&C}, command and controll structure, specifies
 the way and protocols in which the botmaster and the bots communicate
-to each other. It is the central property of any botnet.
+with each other. It is the central property of any botnet. Common
+protocols for C\&C include IRC, HTTP, FTP and P2P.\cite{borgaonkar2010analysis}
 
 {\it IRC} --- internet relay chat --- is a ``teleconferencing
 system''\cite{irc}, typically used for text chatting in channels
 joined by a large number of participants. While its protocol is
 relatively easy to implement, it provides a lot of features. It has
-thus become the de-facto standard for conventional botnets.
+thus become the de-facto standard for C\&C in conventional botnets.
 
 The process of {\it bootstrapping} generally describes starting a more
 complex system ontop of a simple system. In regard to botnets, the
@@ -83,7 +98,79 @@ term usually means loading of the bot code (often injected into the
 original filesharing program) and establishing a connection to other
 bots.\cite{wang2009systematic}
 
+\section{A brief history of botnets}
+It is not surprising that the first bot --- Eggdrop --- was a
+non-malicious IRC bot. Its origins go back to the year 1993. However,
+in April 1998 a deriviant called GT-Bot formed the first malicious
+botnet, using IRC's C\&C structures. Four years later, in 2002,
+Slapper was the first worm to make use of P2P for
+C\&C.\cite{li2009botnet}
 
+\section{The genesis of a P2P botnet}
+
+
+\subsection{Classification P2P networks}
+\label{ClassificP2P}
+There are three types of P2P networks: ``parasite'', ``leeching'' and
+``bot-only''.\cite{wang2009systematic} 
+
+Parasite and leeching bots infiltrate existing P2P networks, while
+``bot-only'' networks are designed as new networks. 
+
+Parasite botnets recruit new bots only from the set of existing P2P
+participants; they try to infect system inside the P2P network and
+make them become bots. Due to the often illegal content distributed in
+file sharing networks, they are a perfect culture medium of viruses,
+malware and worms. It is thus convenient for an attacker to spread a
+highly-demanded file (e.g. porn) containing the injection code
+sequences of his bot. This code is then injected into the file sharing
+client. Vulnerable hosts in the network are infected this way. On the
+downside, this means that the spread of the bot is limited to the size
+of the P2P network.
+
+In contrast, leeching bots not only try to infiltrate systems which
+are already part of the P2P network, but also systems outside of the
+P2P network. Natuarally, they are bigger in size as they have to
+deliver the P2P client, too. This might be more difficult to achieve
+as it means that systems must unwillingly take part in the
+network. Often, firewalls and port-forwarding are not properly
+configured on these systems, reducing the performance of the
+botnet. Leeching bots can spread through any possible measure: File
+sharing, downloads on websites, email attachments and instant
+messanging.
+
+There are good reasons for either strategy: Using an existing P2P
+network as a base like parasite and leeching bots do unburdens the
+botmaster from setting up and building a botnet infrastructure. It
+profits from the established P2P network, making use of filtering,
+error-correction and encryption as far as the chosen network has
+support for it. On the other hand, features are limited to the
+existing P2P protocol. A specifically-built P2P bot-only network is
+natuarally more tailored towards its purpose. Due to the bot-exclusive
+memberships, it might be easier to shutdown as all participants can be
+considered bots and there is no risk of accidentally shutting down an
+innocent member.
+
+\subsection{Lifetime of P2P botnets}
+Wang et. all\cite{wang2009systematic} differentiate three stages of P2P botnets:
+\begin{itemize}
+\item recruiting bot members
+\item forming the botnet
+\item standing by for instruction
+This is the actual ``operational'' phase of the botnet. Bots are awaiting instructions from their master. Instructions can either be actual commands or performing updates. In this phase, the chosen C\&C structure is essential.
+\end{itemize}
+It should be noted that these phases are not strictly exclusive,
+e.g. during the third phase building of the botnet may well
+continue. In fact, this is a typical property of any P2P network. It
+is only until a critical mass of bots has proceeded past phase one and
+two, that the botnet can be called operational.
+
+\section{C\&C in P2P botnets}
+Central server, hybrid, completely decentralized
+
+\section{Comparison: Conventional bots vs. P2P bots}
+
+\section{Counter measure against evil P2P botnets}
 
 %------------------------------------------------------------------------------
 \bibliographystyle{alpha}
