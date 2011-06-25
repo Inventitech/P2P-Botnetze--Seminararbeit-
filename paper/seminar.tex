@@ -19,12 +19,12 @@
 \title{Peer-To-Peer in Botnets}
 
 % Angaben zum Author
-\author{Moritz Marc Beller,\\Ben Nachname}
+\author{Moritz Marc Beller}
 \institute{%
    Fakultät für Informatik, \\
    Technische Universität München \\
 %    Munich, Germany\\
-   \email{\{beller,bennachname\}@in.tum.de}
+   \email{\{beller\}@in.tum.de}
 }
 
 \pagestyle{plain}
@@ -36,12 +36,25 @@
 
 %------------------------------------------------------------------------------
 \begin{abstract}
-Diese Arbeit behandelt ein interessantes Thema.
+This work deals with a new means of communication in botnets, namely
+{\it peer-to-peer} communication.  In this work, we motivate the research on botnets by recent real-world threats and introduce common botnet terminology. We give a classification of P2P botnets and distinguish different architectures of botnets. In the following sections, we describe the typical lifetime of a P2P botnet, the command and control structure in P2P botnets and compare conventional to P2P botnets. Finally, we described possible countermeasures specifically against P2P botnets.
 \end{abstract}
 
 %------------------------------------------------------------------------------
 \section{Einleitung}
+Cyber-attacks are a growing threat to the security of the world. As a
+result, in June of 2011, German government has founded a ``national
+defense centre against cyber crime''.\cite{cyber} This step became
+necessary, as new forms of computer worms are no longer restricted to
+harming only computers and the data stored on them:
 
+ In 2010, a new computer worm called ``Stuxnet'' was discovered. It is
+ suspected to have damaged Iran's uranium centrifuges, giving it the
+ title ``the first cyber weapon''\cite{benzin2011first}. To spread and
+ update, Stuxnet used Internet and Intranet structures to build its
+ own botnet.\cite{fallierew32} Stuxnet is in alignment with a series
+ of new botnets using peer-to-peer communication instead of a
+ centralized server. This work focuses on these P2P botnets.
 
 
 \section{Definitions}
@@ -271,6 +284,8 @@ decentralized.
 
 
 \subsubsection{Hybrid Architecture}
+Hybrid architectures are botnet architectures proposed by scientific development and up to this date only exist in theory. They have been described as ``the advanced P2P botnet''\cite{td1sc} and the ``super botnet''\cite{vogt2007army}. The approach is to study current P2P botnets, analyze their weaknesses and propose a better solution. This anticipates how botmasters could improve their botnets in the future. This way, even today, we now how future botnets could look like and how to better defend against them.
+
 \begin{figure}[htbp]
   \centering
   \fbox{
@@ -279,7 +294,14 @@ decentralized.
   \caption{Hybrid network (Source: \cite{td1sc})}
   \label{hybrid-network}
 \end{figure}
-hele: \cite{td1sc}
+
+Both the advanced P2P botnet and the super botnet have their own P2P
+protocols for C\&C. They implement both push and pull
+C\&C.\cite{wang2009systematic} When a bot receives a command it
+forwards it to all the peers in its list (push). If a bot cannot
+accept incoming connections (due to network misconfiguration, or a
+firewall), it actively prompts other peers in its connection list from
+time to time to receive new commands (pull).
 
 doesnt need bootstrapping
 fixed size peer list no reveal to others 
