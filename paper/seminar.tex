@@ -3,7 +3,7 @@
 %% Verwende A4-Format statt Letter
 \usepackage{a4}
 %% Deutsche Silbentrennung und Sprache (neue Rechtschreibung)
-\usepackage[ngerman]{babel}
+%\usepackage[ngerman]{babel}
 %% Verwende Schriftart mit "echten" Umlauten statt Akzenten
 \usepackage[T1]{fontenc}
 %% Verwende Umlaute direkt
@@ -41,11 +41,11 @@ This work deals with a new means of communication in botnets, namely
 \end{abstract}
 
 %------------------------------------------------------------------------------
-\section{Einleitung}
+\section{Introduction}
 Cyber-attacks are a growing threat to the security of the world. As a
-result, in June of 2011, German government has founded a ``national
+result, in June of 2011, the German government founded a ``national
 defense centre against cyber crime''.\cite{cyber} This step became
-necessary, as new forms of computer worms are no longer restricted to
+necessary as new forms of computer worms are no longer restricted to
 harming only computers and the data stored on them:
 
  In 2010, a new computer worm called ``Stuxnet'' was discovered. It is
@@ -54,7 +54,8 @@ harming only computers and the data stored on them:
  update, Stuxnet used Internet and Intranet structures to build its
  own botnet.\cite{fallierew32} Stuxnet is in alignment with a series
  of new botnets using peer-to-peer communication instead of a
- centralized server. This work focuses on these P2P botnets.
+ centralized server. This work focuses on these P2P botnets and the
+ growing threat emerging from them.
 
 
 \section{Definitions}
@@ -168,11 +169,26 @@ memberships, it might be easier to shutdown as all participants can be
 considered bots and there is no risk of accidentally shutting down an
 innocent member.
 
-\subsection{Architecture}
+
+\subsection{Lifetime of P2P botnets}
+Wang et al.\cite{wang2009systematic} differentiate three stages of P2P botnets:
+\begin{itemize}
+\item Recruiting bot members (infecting others)
+\item Forming the botnet (construction phase)
+\item Standing by for instruction \\
+This is the actual ``operational'' phase of the botnet. Bots are awaiting instructions from their master. Instructions can either be actual commands or performing updates. In this phase, the chosen C\&C structure is essential.
+\end{itemize}
+It should be noted that these phases are not strictly exclusive,
+e.g. during the third phase building of the botnet may well
+continue. In fact, this is an inherent property of any P2P network. It
+is only until a critical mass of bots has proceeded past phase one and
+two, that the botnet can be called operational.
+
+\section{Architectures of Botnets}
 Up to this point, there exist two principally different architectures
 of botnets, and one mix-form of both. The following nomenclature is
 extracted follows \cite{steggink2007detection}:
-\subsubsection{Centralized Architecture}
+\subsection{Centralized Architecture}
 %
 % Das Bild aus Buch soundso von Seite soundso
 %
@@ -209,14 +225,16 @@ identity easy. In many countries, launching an ``evil-minded botnet''
 is a serious crime. Instead, hacked or public IRC servers are used as
 the central C\&C node. A connection from the attacker's computer to
 the central server is often abufascated by many in-between relays,
-tunnels and encryption. A sentence because of launching a botnet is
-thus relatively seldom. Yet, in 2007 John Schiefer was sentenced to
-four years in prison. He built a botnet with up to 250,000 zombies,
-collecting passwords and bank credentials from the bots.  In figure
+tunnels and encryption. In figure
 \ref{central-network} this is shown as the ``steeping stones'' which
 shall hide an attacker's idenity.
 
-\subsubsection{Decentralized Architecture}
+ A criminal conviction because of launching a botnet is thus
+ relatively seldom. Yet, in 2007, John Schiefer was sentenced to four
+ years in prison. He built a botnet with up to 250,000 zombies,
+ collecting passwords and bank credentials from the bots.\cite{BotnetCrime}
+
+\subsection{Decentralized Architecture}
 \label{decent}
 Dezentralized architectures do not rely on the special role of one
 central server. Instead, they are built upon the principal of
@@ -227,7 +245,6 @@ as shown in figure \ref{p2p-network}. It is thus more difficult for a
 bot to join the botnet. Extensive bootstrapping is required, as the
 bot has to figure out an already-participating peer to connect to in the
 beginning. Once inside the net, information about other peers is
-exchanged between knodes.Once inside the net, information about other peers is
 exchanged between knodes. There are two approaches for bootstrapping\cite{wang2009systematic}:
 \begin{itemize}
 \item A list of peers likely to be online is hardcoded into the client. This list can later be updated
@@ -273,6 +290,7 @@ hybrid architecture, whereas Steggink et al.
 \cite{steggink2007detection} classify it as
 decentralized. 
 
+% P2P network picture
 \begin{figure}[htbp]
   \centering
   \fbox{
@@ -283,8 +301,155 @@ decentralized.
 \end{figure}
 
 
-\subsubsection{Hybrid Architecture}
-Hybrid architectures are botnet architectures proposed by scientific development and up to this date only exist in theory. They have been described as ``the advanced P2P botnet''\cite{td1sc} and the ``super botnet''\cite{vogt2007army}. The approach is to study current P2P botnets, analyze their weaknesses and propose a better solution. This anticipates how botmasters could improve their botnets in the future. This way, even today, we now how future botnets could look like and how to better defend against them.
+\subsection{Hybrid Architecture}
+Hybrid architectures are botnet architectures proposed by scientific
+development and up to this date only exist in theory. They have been
+described as ``the advanced P2P botnet''\cite{td1sc} and the ``super
+botnet''\cite{vogt2007army}. The approach is to study current P2P
+botnets, analyze their weaknesses and propose a better solution. This
+anticipates how botmasters could improve their botnets in the
+future. This way, even today, we know what future botnets could look
+like and how to better defend against them.
+
+The proposed new hybrid P2P botnets do not have a pre-set
+communication architecture, following the strict P2P-definiton. Their
+network connectivity is solely determined by the {\it peer list} in each
+bot.  
+
+Only machines with static IPs appear as bots in the peer list, so-called {\it
+  servents}. This way, it is guranteed that the distributed peer lists
+are maximally deadlink-free.  This is a specialization of the ``all
+peers are equal'' contract in P2P: Some bots -- the servents -- have
+special obligations described in the following.  The clients are then
+typically bots behind firewalls, machines with private or dynamic IPs.
+
+\subsubsection{Network construction phase}
+
+Infection is done no different than in conventional botnets
+(cf. \ref{ClassificP2P}). The basic construction procedure has two
+mechanisms:
+\begin{itemize}
+\item {\bf New Infection:} ``Bot A passes its peer list to a
+vulnerable host B when compromising it. If A is a
+servent bot, B adds A into its peer list (by randomly
+replacing one entry if its peer list is full). If A knows
+that B is a servent bot (A may not be aware of
+B’s identity, for example, when B is compromised by
+an e-mail virus sent from A), A adds B into its peer
+list in the same way.'' \cite{td1sc}
+\item {\bf Reinfection:} ``If bot A
+reinfects bot B, bot B will then replace \lbrack{}a series of\rbrack{} 
+ randomly selected bots in its peer list with \lbrack{}...\rbrack{} bots
+from the peer list provided by A. Again, bots A and B
+will add each other into their respective peer lists if
+the other one is a servent bot.''\cite{td1sc}
+\end{itemize}
+
+Both the advanced P2P botnet and the super botnet have their own P2P
+protocols for C\&C. They implement push and pull
+C\&C.\cite{wang2009systematic} When a bot receives a command it
+forwards it to all the peers in its list (push). If a bot cannot
+accept incoming connections (due to network misconfiguration, or a
+firewall), it actively polls other peers in its connection list from
+time to time to receive new commands (pull, cf. \ref{pushpull} on page
+\pageref{pushpull}).
+
+\subsubsection{Lifetime Comparison against superbot net}
+
+In the following, we will concentrate on the ``the advanced P2P
+botnet'' as described by \cite{td1sc}. It was shown by Wang et
+al. \cite{td1sc} that the super botnet suggested by Vogt et al. is not
+likely to become successful in a real world scenario:
+
+% distribution graph picture
+\begin{figure}[htbp]
+  \centering
+  
+    \includegraphics[width=0.6\textwidth]{figures/distributiongraph.png}
+  
+  \caption{Degree distribution graph of servent bots assuming only new-infections and reinfections (derived work, original source: \cite{td1sc}). Simulation constraints: possible vulnerable hosts $n=500,000$, stop of growth of botnet after $n=20,000$, peer list size $M=20$, 21 initial servent bots.}
+  \label{distributiongraph}
+\end{figure}
+
+% distribution graph picture
+\begin{figure}[htbp]
+  \centering
+  
+    \includegraphics[width=0.6\textwidth]{figures/distributiongraph2.png}
+  
+  \caption{Degree distribution graph of servent bots simulating peer list update propagation, also (Source: \cite{td1sc}). Most notably, the 21 initial servent bots cannot be spotted. Instead, a robust backbone for the P2P network has formed out of 1,000 servent bots $v$ (around x-axis 6), $deg(v) \in [300;500]$.}
+  \label{distributiongraph2}
+\end{figure}
+
+\begin{itemize}
+\item \label{nat} In contrast to what Vogt et al. assume, most of the
+  compromised computers cannot act as servers (due to a firewall,
+  NAT\footnote{Network Address Translation, occurrs behind a router}
+  or dynamic IP address) in the real world.
+\item Even though Vogt et al. demonstrated the robustness of their
+  constructed botnet (cf. \cite{vogt2007army}), they rely on the
+  assumption that enough reinfections will occcurr during the early
+  lifetime of the botnet, namely the buildup-phase. According to
+  \cite{td1sc} this is a false assumption as heavy reinfection-seeking
+  during buildup will lead to easy detection of the botnet and a lot
+  of wasted resources. Following this approach, Wang et al. showed
+  that the super botnet algorithms for propagation --- namely only
+  ``new infection'' and ``reinfection'' --- require over 200,000
+  infections events to create an evenly balanced botnet of only 20,000
+  vulnerable bots. As a result, when not enough reinfections occurr, a
+  scenario as depicted in figure \ref{distributiongraph} arises:
+  Because the botnet stops growth after having infected 20,000 hosts,
+  but there is such a huge amount of vulnerable hosts (500,000), a
+  reinfection event rarely ever happens. This means, that servent bots
+  only seldom exchange parts of their peer lists. As a consequence,
+  the connection to servent bots is extremely unbalanced: In the
+  network graph, 80\% of servent bots have a degree less than 30,
+  while the initial 21 servents have degrees between 14,000 --
+  17,000. This effectivley means that most of the newly introduced
+  servers have very few peers (both clients and servents) connected to
+  them, essentially degrading the P2P botnet to a central network with
+  21 main servers. This is by no means an ideal P2P botnet.
+
+When it is not possible to have enough reinfections, the ``new
+infection'' and ``reinfection'' propagation measures are obviously not
+enough.
+\end{itemize}
+
+\subsubsection{Peer list updating}
+Because of this problem, Wang et al. propose a new, third propagation
+method: Peer list updating. The idea behind this is that bots update
+their peer lists frequently. However, this imposes a severe security
+problem: An attacker capturing only one bot could soon reveal the
+identity of many servents in the network. Thus, a new command is
+introduced: Enforced peer list updating. As described in \cite{td1sc},
+it is possible for a botmaster to monitor his botnet, i.e. determine
+how many servents exist. After a sufficiently large time after
+construction phase, he can enforce a peer list update: All bots obtain
+a new peer list from a specified {\it sensor host}. This sensor host
+is equipped with the knowledge of all the servents in the network by
+the monitor-command issued by the botmaster. Upon query, the sensor
+host creates a peer list in the following way: It randomly chooses
+servent bots, composes an updated peer list out of them and sends it
+back to the querying bot. After each peer list update command, all
+bots will have ``uniform and balanced connections.''\cite{td1sc}
+
+The network graph obtained is then similar to the one shown in figure
+\ref{p2p-network} on page \pageref{p2p-network}.
+
+It is to be discussed, at which point in time it makes sense for the
+botmaster to enforce a peer list update, for every update command
+bears the risk of discovery of parts of the network. This is further
+discussed in \cite{td1sc}. Simulations with an update after the first
+1,000 infections show that this will result in a degree distribution
+depicted in figure \ref{distributiongraph2}: The first 1,000 servents
+have many balanced connections ($deg(v) \in [300;500]$), forming the
+robust backbone and connecting the hybrid P2P network tightly
+together. However, the remaining 4,000 servents (connected to the
+network after the update-command was run) have the known symptom of
+having degrees between 20-30, a situation well-known from the
+simulations of the superbot net (cf. figure
+\ref{distributiongraph}). Thus, a forced peer list update from time to
+time seems necessary to make for a good P2P infrastructure.
 
 \begin{figure}[htbp]
   \centering
@@ -295,62 +460,49 @@ Hybrid architectures are botnet architectures proposed by scientific development
   \label{hybrid-network}
 \end{figure}
 
-Both the advanced P2P botnet and the super botnet have their own P2P
-protocols for C\&C. They implement both push and pull
-C\&C.\cite{wang2009systematic} When a bot receives a command it
-forwards it to all the peers in its list (push). If a bot cannot
-accept incoming connections (due to network misconfiguration, or a
-firewall), it actively prompts other peers in its connection list from
-time to time to receive new commands (pull).
+\subsubsection{Further improvements}
 
-doesnt need bootstrapping
-fixed size peer list no reveal to others 
-only static ip bots as peers -> no many deadlicks in peer list called servents (cf. figure)
-separation between servents classically all bots (clients/servers) and clients: bots behind firewalls, private ips and dynamic ip
-data encryption
-Push/pull mechanism
-peer list updating on update command by botmaster
+The proposed hybrid network has several other advantages over common,
+existing P2P networks: It doesn't need bootstrapping, removing a
+single point of failure. Bootstrapping is avoided due to the three
+propagation measures (new infections, reinfections and forced peer
+list updates). An initial peer list is simply passed on to the newly
+infected zombie by the machine infecting it. Due to its fixed size
+peer list ($M=20$ in the simulations for \ref{distributiongraph},
+\ref{distributiongraph2}), when an attacker gets access to a bot, it
+doesn't reveal whole (sub-)nets.  Only machines with static IPs appear
+as peer bots, so-called {\it servents}. This way, it is guranteed that
+the distributed peer lists are maximally deadlink-free. Data
+encryption in the hybrid P2P botnet has two functions: First, it makes
+it hard to sniff for patterns in internet traffic to detect a possible
+botnet. Second, the authenticity of the issued commands can be
+verified so that only commands signed by the botmaster are
+executed. The bot software can be shipped with a hardcoded public key
+of the botmaster.
 
-super botnet vogt et all. not likely to become successful in a real world scenario as indicated by simulations in advanced ... degree of servent knodes vs. degree of initial servent bots
+\begin{figure}[htbp]
+  \centering
+  \fbox{
+    \includegraphics[width=0.7\textwidth]{figures/central-network2.png}
+  }
+  \caption{Another graphical representation of a central network (Source: \cite{td1sc})}
+  \label{central-network2}
+\end{figure}
 
+Compared to a central-strucutre botnet (see \ref{central-network2}),
+the hybrid P2P net (see \ref{hybrid-network}) is only an extension of the
+orginial network: It is essentially equivalent to a central
+architecture P2P net. However, the amount of servers (in the form of
+servents) is greatly increased, as is the number of interconnections
+between them. The great number of servents is the primary reason why
+the hybrid P2P botnet is supposedly very hard to shut
+down.\cite{td1sc}
 
-The advanced hybrid P2P botnet [10] and the super botnet [11] are two
-newly designed P2P botnets, whose C\&C commu- nication are not
-dependent on existing P2P protocols. Both of them implements push and
-pull C\&C mechanisms. In a hybrid P2P botnet, when a bot receives a
-command, it forwards the command to all the peers in the list (push),
-and those who cannot accept connection from others periodically
-contacts other bots in the list and try to retrieve new commands
-(pull).  A super botnet is composed of a number of small centralized
-botnets. Commands are pushed from one small botnet to (a) Centralized
-Botnet (b) Index-based P2P Botnet Fig. 1: Similarity of logical C\&C
-structures between traditional centralized botnets and index-based P2P
-botnets another, and within a small centralized botnet, bots pull the
-command from their C\&C servers. Furthermore, the hybrid P2P botnet is
-able to effectively avoid bootstrap procedure, which is required by
-most of the existing P2P protocols, by 1) passing a peer list from one
-bot to a host that is infected by this bot, and 2) exchanging peer
-lists when two bots communicate.  The drawback of designing a new
-protocol for P2P botnet communication is that the new protocol has
-never been tested before. When a botnet using this protocol is
-deployed, the network may not be as stable and robust as expected due
-to complex network conditions and defenses.
-
-\cite{wang2009systematic}
-
-\subsection{Lifetime of P2P botnets}
-Wang et al.\cite{wang2009systematic} differentiate three stages of P2P botnets:
-\begin{itemize}
-\item recruiting bot members
-\item forming the botnet
-\item standing by for instruction
-This is the actual ``operational'' phase of the botnet. Bots are awaiting instructions from their master. Instructions can either be actual commands or performing updates. In this phase, the chosen C\&C structure is essential.
-\end{itemize}
-It should be noted that these phases are not strictly exclusive,
-e.g. during the third phase building of the botnet may well
-continue. In fact, this is a typical property of any P2P network. It
-is only until a critical mass of bots has proceeded past phase one and
-two, that the botnet can be called operational.
+As tempting as such an advanced new botnet protocol may sound, it has
+to be acknowedlged that the hybrid P2P botnet is a purely academical,
+theoretical idea that has never been tested in practice: ``The network
+may not be as stable and robust as expected due to complex network
+conditions and defenses.''\cite{wang2009systematic}
 
 \section{C\&C in P2P botnets}
 Central server, hybrid, completely decentralized
@@ -360,19 +512,55 @@ see p. 3 in 10.1.1.153.8296
 
 authentication of commands
 
-push/pull distribution of c\&c
+\subsection{Push/Pull mechanism}
+\label{pushpull}
+Commands can be distributed in two ways: Either via a push or a pull mechanism. ``Pulling'', being the more trivial of the two approaches, is the process of a client actively asking a server whether there's new instructions for it. To be up-to-date this has to be perforemd periodically, increasing network load.
+Push on the other hand is technically more advanced, as commands from the server will be automatically ``pushed'' to the clients --- the difference between push and pull in a bot is thus much like IMAP IDLE compared to POP3 for mail. This has the advantage of reducing the network traffic, but it requires that the server can open a connection to the clients (cf. \ref{nat}). 
 
 \section{Comparison: Conventional bots vs. P2P bots}
+some real world examples of P2P bots and what their c\&c etc. looks like
+tbw.
 
 \section{Detection of and Counter measure against evil P2P botnets}
 \label{counter-measure}
-what to defend against
-- detection
-- in p2p: false commands from not botmaster
-- shutdown of single hosts
-- shutdown of large parts of botnet
-- shutdown of whole botnet
+What can an attacker do to de-arm a botnet at all? The ideal solution would be to shutdown all participants in the botnet (and only those). Realistically, this is almost never possible. Sub-tasks in fighting a botnet are therefore:
+\begin{itemize}
+\item Detecting the botnet at all
+\item Analyzing the botnet: Finding servers, zombies, estimating the size of the botnet
+\item Preventing further spread of botnet: Fixing security exploit of injection vector
+\item Disabling the bot(sub-)nets: Making clients loose inter-connection, shutting down central servers
+\item Infiltrating botnet to do non-malicious tasks
+\end{itemize}
 
+While it is --- in theory --- realtivley easy to shutdown a centralized architecture by determining the central servers and disabling those (e.g. through DoS attacks\footnote{Denial of Service attacks, i.e. generating so much traffic the target cannot function normally any more}), P2P networks are arguably harder to disable, given they are properly protected. 
+
+\subsection{Index-poisoning}
+Napster-like P2P networks use an index to determine where to get a
+certain file from. Index-poising has been reported to have succeeded
+in fighting two recent P2P bots, namely Trojan.Peacomm and
+Stormnet.\cite{grizzard2007peer}, \cite{liang2006index} 
+
+<-- insert more detailed description of p2p indices -->
+
+``Originally, index poisoning attack was in- troduced to prevent
+illegal distribution of copyrighted content in P2P networks. The main
+idea is to insert massive number of bogus records into the index. If a
+peer receives bogus record, it could end up not being able to locate
+the file (nonexistent location), or downloading the wrong
+file''\cite{wang2009systematic}
+
+Once you know under which keys the botnet commands are stored in the
+index records, an attacker trying to shutdown the network can insert
+false commands under the same keys. If there is enough false
+information, chances to hit the real command issued by the botmaster
+are slim. The index gets ``flooded'' or poisned by wrong
+commands. These can either be NOPs, or may even help to disguise the
+botnet.
+
+
+\subsection{Sybil attack}
+
+\subsection{Bootstrapping}
 Bootstrapping is a vulnerable point in any P2P botnet. When a hardcoded peer list is used (cf. for details), it is sufficient to take down all the peers in the bootstrapping table for the network to eventually shutdown: New bots simply can't find an initial peer to connect to. Botmasters have reacted to this by providing a Gnutella-like web-cache or updateable bootstrapping tables.
 
 %------------------------------------------------------------------------------
