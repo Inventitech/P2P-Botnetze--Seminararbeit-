@@ -66,10 +66,10 @@ botnets by recent real-world examples and introduce common botnet
 terminology. We give a classification of P2P botnets and distinguish
 different architectures of botnets. In the following sections, we
 describe the typical lifetime of a P2P botnet, the command and control
-structure in P2P botnets and compare conventional botnets to P2P
-botnets. Finally, we described possible countermeasures against P2P
-botnets.
-
+structure in P2P botnets, comparing conventional botnets to P2P
+botnets. In the remainder of this review paper we described possible
+countermeasures against P2P botnets and draw conclusion on what types
+of botnets to expect in the future.
 
 
 \section{Definitions}
@@ -134,7 +134,13 @@ term usually means loading of the bot code (often injected into the
 original filesharing program) and establishing a connection to other
 bots.\cite{wang2009systematic}
 
-\section{A brief history of botnets}
+
+\section{An overview over P2P botnets}
+This section shall give a short overview of P2P botnets: How they came
+into being, how one can classify them according to their distribution
+strategy and what the typical life of a botnet looks like.
+
+\subsection{A brief history of botnets}
 The origins for the term ``bot'' go back to so-called IRC bots, short
 for IRC robots. An IRC bot is a program that handles specific tasks in
 the IRC automatically, so that the administrator does not need to do
@@ -156,10 +162,7 @@ botnet to make use of P2P for C\&C.\cite{li2009botnet}
 
 <TODO> storm botnet
 
-\section{Types of P2P botnets}
-
-
-\subsection{Classification P2P networks}
+\subsection{Classification of P2P networks}
 \label{ClassificP2P}
 There are three types of P2P networks: ``parasite'', ``leeching'' and
 ``bot-only''.\cite{wang2009systematic} 
@@ -219,6 +222,127 @@ the botnet may well continue. In fact, this is an inherent property of
 any P2P network: Constant transformation of the network. It is only
 until a critical mass of bots has proceeded past phase one and two,
 that the botnet can be called operational.
+
+
+\section{Command and Control structures in botnets}
+In this section, we give an overview of the C\&C typically used in P2P
+botnets and compare it to the C\&C in centralized architectures. The
+differences in C\&C are the most notable differences between the two,
+apart from the architecture itself (cf. \ref{architecture}). There
+exist three fundamentally different forms of C\&C in botnets:
+Centralized C\&C, P2P C\&C and unstructured C\&C. After clarifying the
+differences between push and pull communciation, we explain the three
+approaches.
+
+
+\subsection{Push/Pull mechanism}
+\label{pushpull}
+Commands can be distributed in two ways: Either via a push or a pull
+mechanism. ``Pulling'', being the more trivial of the two approaches,
+is the process of a client actively asking a server whether there's
+new instructions for it. To be up-to-date this has to be perforemd
+periodically, increasing network load.  Push on the other hand is
+technically more advanced, as commands from the server will be
+automatically ``forwarded'' to the clients --- the difference between
+push and pull in a bot is much like IMAP IDLE compared to POP3 for
+mail: With POP3, the user client has to periodically ask the server
+whether there are new messages available (pull), whereas with IMAP,
+the client gets a new message pushed by the server. This has the
+advantage of reducing the network traffic, but it requires that the
+server can open a connection to the clients (cf. \ref{nat}).
+
+
+\subsection{C\&C in centralized networks}
+C\&C in centralized networks is more straight-forward than in P2P
+networks. The central servers receive their instructions directly from
+the botmaster. Only he has access to those resources, so there is no
+problem of authentication as in P2P networks
+(cf. \ref{indexpoisoning}). Subsequently, the servers forward their
+commands to all their clients, or the clients ask their servers for
+new orders, depending on whether push or pull communication is used
+(cf. \ref{pushpull}). When information from the bots is gathered, this
+information is collected on the central servers, ready to be
+downloaded by the botmaster. When using IRC as a protocol for C\&C
+(another alternative would be HTTP, \cite{li2009botnet}), the central
+server has an IRC server running on a specific port which the bots
+connect to. The bot must thus contain a suitable IRC client or IRC
+protocol implementation. The exact procedure differs from botnet to
+botnet, but is usually similar to the following: On the server, IRC
+channels are setup which the bots join. Often, all the bots are set to
+listen-only. The botmaster is the controller of the channel. He can
+send commands through private messaging to specific bots, or broadcast
+commands by ``chatting'' to the whole channel. Additional services
+like IRC file transfers can be used to update the bot, or to receive
+files from the bots.
+
+\subsection{C\&C in structured P2P networks: File indices}
+\label{distribution}
+Almost all P2P file sharing systems have so-called {\it indices}, in
+which they map a desired content to a location where it can be found
+(IP address and port). An index can thus be considered as a ``lookup
+table'' for finding the information where a user can retreive a
+certain content he searches for. In terms of botnets, this usually
+resembles the place where a bot can find its orders. Therefore,
+indices are a vital part of any such P2P system emplyoing them.
+
+File indices are typically implemented using a hashed map. For
+botnets, file indices are usually used not to publish the location of
+a file, but to distribute commands. One record in such a map thus has
+the format $<k, m>$, where $k$ is the key under which to store the
+command $m$.
+
+Depending on the architecture of the P2P net (cf. \ref{architecture}),
+the index might be stored in a central position (Napster-like
+filesharing systems), or be distributed over a larger number of
+nodes.  In the latter case, usually only a part
+of the file index is available on a peer. If a peer doesn't have the
+key $k$ a client is searching for in its hash map, it forwards this
+search to its neighbours, so that in the end, the client will receive
+a pair of $<k, m>$ for any given $k$, given the network is healthy and
+there exists a $k$ at all.
+
+Instead of providing information on where to find a certain content as
+in file sharing networks, botmasters insert the actual command to be
+executed by the bot into the record.  In order to get commands issued
+by botmasters, bots periodically initiate queries for a set of $k$,
+and nodes which preserve the corresponding records will return query
+hits with commands encoded. Thus, using file indices implies using
+pull mechanism. \cite{liang2006index}
+
+\subsection{C\&C in unstructured P2P networks}
+Dezentralized: Peacom p.7 in 10.1.1.112.3561.pdf
+see p. 3 in 10.1.1.153.8296
+
+<TODO> unstructured P2P 
+
+In contrast to the structured P2P C\&C, in unstructured C\&C a bot
+won't ever actively contact other bots. Instead, it listens to
+incoming connections.  \cite{liang2006index}
+
+
+When commands are pushed in P2P networks, this implies a more complex infrastructure. \cite{li2009botnet} formulate two problems to be dealt with:
+\begin{list}
+\item Which bots should a command be forwarded to?
+\item How should the commands be forwarded (only relevant for leeching
+  and parasite botnets)? Using {\it in-band} (normal P2P traffic) or
+  {\it out-of-band} (non-P2P traffic) communication?
+\end{list}
+
+-> Scurn of network
+
+Compared to pull mechanism, implementation of push
+mechanism on existing P2P protocols is more complex. There
+are two major design issues:
+• Which peers should a bot forward a command to?
+• How to forward commands: using in-band (normal P2P
+traffic) or out-of-band messages (non-P2P traffic)?
+To address the first issue, the simplest way is to let a bot
+use its current neighboring peers as targets. But the problem
+of this approach is that command distribution may be slow
+or sometimes disrupted, because 1) some bots have a small
+number of neighbors, or 2) some peers in a bot’s neighbor list
+
+
 
 \section{Architectures of Botnets}
 \label{architecture}
@@ -541,31 +665,8 @@ theoretical idea that has never been tested in practice: ``The network
 may not be as stable and robust as expected due to complex network
 conditions and defenses.''\cite{wang2009systematic}
 
-\section{Command and Control structures in P2P botnets}
-Central server, hybrid, completely decentralized
 
-Dezentralized: Peacom p.7 in 10.1.1.112.3561.pdf
-see p. 3 in 10.1.1.153.8296
-
-authentication of commands
-
-\subsection{Push/Pull mechanism}
-\label{pushpull}
-Commands can be distributed in two ways: Either via a push or a pull
-mechanism. ``Pulling'', being the more trivial of the two approaches,
-is the process of a client actively asking a server whether there's
-new instructions for it. To be up-to-date this has to be perforemd
-periodically, increasing network load.  Push on the other hand is
-technically more advanced, as commands from the server will be
-automatically ``forwarded'' to the clients --- the difference between
-push and pull in a bot is much like IMAP IDLE compared to POP3 for
-mail: With POP3, the user client has to periodically ask the server
-whether there are new messages available (pull), whereas with IMAP,
-the client gets a new message pushed by the server. This has the
-advantage of reducing the network traffic, but it requires that the
-server can open a connection to the clients (cf. \ref{nat}).
-
-\section{Detection of and Counter measure against evil P2P botnets}
+\section{Detection of and countermeasure against evil P2P botnets}
 \label{counter-measure}
 What can an attacker do to de-arm a botnet at all? The ideal solution
 would be to shutdown all participants in the botnet (and only
@@ -582,7 +683,12 @@ perspective:
 \begin{itemize}
 \item Detecting the botnet at all, which can be very difficult for P2P
   parasite and leeching networks, as a separation between ``bot'' P2P
-  and ``real'' P2P datastreams has to be made.
+  and ``real'' P2P datastreams has to be made. In
+  \cite{steggink2007detection} it was shown that the bot Storm
+  (therein referred to as ``Peacomm'') uses a fixed package size for
+  95\% of its communication: 67 bytes (72,1\% of traffic) and 60 bytes
+  (23,3\%). If you find this atypical package size profile in a P2P
+  network, it's likely to be infected by Storm.
 \item Analyzing the botnet: Finding the servers (if there are any) and
   participating zombies. It is also helpful to be able to estimate the
   size of the botnet. When using a technique like sybil attacks, this
@@ -623,16 +729,8 @@ There are three well-known techniques to fight P2P botnets in
 particular.
 
 \subsection{Index poisoning}
-Almost all P2P file sharing systems have so-called {\it indices}, in
-which they map a desired content to a location where it can be found
-(IP address and port). An index can thus be considered as a ``lookup
-table'' for finding the information where a user can retreive a
-certain content he searches for. Therefore, indices are a vital part
-of any such P2P system emplyoing them. Depending on the architecture
-of the P2P net (cf. \ref{architecture}), the index might be stored in
-a central position (Napster-like filesharing systems), or be
-distributed over a larger number of nodes. \cite{liang2006index}
-
+\label{indexpoisoning}
+\subsubsection{An attacker's idea: Polluting the file index}
 The principal idea of index-poisoning is given by
 \cite{wang2009systematic}: ``Originally, index poisoning attack was
 introduced to prevent illegal distribution of copyrighted content in
@@ -659,7 +757,29 @@ in fighting two recent P2P bots, namely Trojan.Peacomm and
 Stormnet. (\cite{grizzard2007peer}, \cite{liang2006index})
 
 
+\subsubsection{A botmaster's counterdefence: Authentication of commands}
+It is an inherent property of any P2P network that any peer can and
+should distribute commands. However, how can one achieve that only the
+botmaster's commands are distributed and executed? In a centralized
+architecture, this is relatively easy to assure: Only the botmaster
+has the password to the servers, so only he can log onto them and
+issue new commands. However, with P2P networks an encryption mechanism
+for the commands must be implemented, such as GPG\cite{GPG}. The
+botmaster signs (and possibly even encrypts) his commands with his
+private GPG key. By supplying the botclients with the botmaster's
+public key, they can authenticate the issuer of the command in
+question. As it is very difficult to calculate the private key based
+on the public key, bots can be assured that the issuer of the command
+is their botmaster. For this to practically work, file index records
+$<k, m>$ , see \ref{distribution}) could be enriched with a new column
+$H(m)$, where $H(m)$ is the hash value of $m$, i.e. the signature of
+the command.\cite{wang2009systematic} To verify $m$ has been issued by
+the botmaster, a bot takes $H(m)$ and checks if it has been properly
+signed by applying the hardcoded public signature to it.
+
+
 \subsection{Sybil attack}
+\subsubsection{An attacker's idea: Inserting fake nodes}
 A {\it sybil attack} on a botnet is a form of attack where large
 quantities of fake nodes (the so-referred to sybils) are inserted into
 the botnet. By infiltrating the botnet's peer list, the sybils try to
@@ -677,6 +797,7 @@ Generally speaking, it is more expensive to run a sybil attack than an
 index-poisoning attack, as the former requires far more infrastructure
 at the disposal of the attacker.
 
+\subsubsection{A botmaster's counterdefence}
 Botmasters could utilize known P2P technique to fight against the
 weakness of sybil attacks: According to \cite{douceur2002sybil}, it is
 common practice for a P2P system to distribute computational or
@@ -714,7 +835,8 @@ P2P botnet is principally no harder than that of a central network
 when employing the index poisoning technique, our understanding and
 findings, as shown in this paper, are substantially different and
 backed-up by both reason and literature (\cite{zou2006honeypot},
-\cite{berger2009exploiting}). Additionally, new P2P protcols can be
+\cite{berger2009exploiting},
+\cite{steggink2007detection}). Additionally, new P2P protcols can be
 made resistent to index poisoning (shown in the same paper,
 \cite{wang2009systematic}), or file indices can be completely ommited,
 whereas the central nature of the servers remains a single point of
@@ -723,7 +845,7 @@ failure in centralized architectures.
 In fact, because they are harder to disable, more agile and dynamic in
 their lives, we believe that P2P botnets will play an ever-growing
 role in the future. It can also be cheaper to setup a P2P botnet,
-since there should be no costs for central servers. Centralized
+since there are no costs for central servers. Centralized
 architectures on the other hand have been seen to decline and will
 probably continue to do so. Also, some signifcant research for
 improvement in the exisiting P2P protocols has been conducted,
