@@ -152,6 +152,14 @@ GT-Bot appeared and formed the first malicious botnet, using IRC's
 C\&C structures. Four years later, in 2002, Slapper was the first
 botnet to make use of P2P for C\&C.\cite{li2009botnet}
 
+There have been many more P2P botnets created since, most notably
+perhaps the Phatbot and Storm botnets. Phatbot (also called Agobot,
+Gaobot) became reknown for its large set of built-in attacks ranging
+from password sniffing to DOS.\cite{cooke2005zombie} The storm botnet
+which exists in several different versions was described ``as one of
+the most sophisticated botnet[s] active
+today''\cite{davis2008sybil}. Storm is based on the Overnet network, a
+P2P network established by programs such as ``eMule'' and ``eDonkey''.
 
  A criminal conviction because of launching a botnet is relatively
  seldom, since botmaster try to hide their identities (see ``steeping
@@ -160,15 +168,14 @@ botnet to make use of P2P for C\&C.\cite{li2009botnet}
  with up to 250,000 zombies, collecting passwords and bank credentials
  from the bots.\cite{BotnetCrime}
 
-<TODO> storm botnet
 
 \subsection{Classification of P2P networks}
 \label{ClassificP2P}
-There are three types of P2P networks: ``parasite'', ``leeching'' and
-``bot-only''.\cite{wang2009systematic} 
+There are three types of P2P networks: {\it parasite, leeching and
+bot-only.}\cite{wang2009systematic} 
 
 Parasite and leeching bots infiltrate existing P2P networks, while
-``bot-only'' networks are designed as new networks. 
+``bot-only'' networks are designed with new networks protocols. 
 
 Parasite botnets recruit new bots only from the set of existing P2P
 participants; they try to infect system inside the P2P network and
@@ -223,6 +230,14 @@ any P2P network: Constant transformation of the network. It is only
 until a critical mass of bots has proceeded past phase one and two,
 that the botnet can be called operational.
 
+When speaking about P2P networks, a factor that must be taken into
+consideration is the {\it churn} of the network. By this name, we
+describe the collective effects that the independent connects and
+disconnects of thousands of peers can have. The term churn also refers
+to the different session lengths (most P2P users typically have their
+PC running for one to three hours, while there are some which stay
+constantly online). In short, churn stands for the dynamics in a P2P
+system. \cite{stutzbach2006understanding}
 
 \section{Command and Control structures in botnets}
 In this section, we give an overview of the C\&C typically used in P2P
@@ -291,57 +306,98 @@ a file, but to distribute commands. One record in such a map thus has
 the format $<k, m>$, where $k$ is the key under which to store the
 command $m$.
 
+In order to find a search result for a query $q$, in structured P2P
+networks such as Overnet, the following algortihm is used: $q$ is
+directed to nodes whose IDs are closer to the queried hash key. If it
+finally finds a peer which can offer the searched $k$, a direct
+connection between the two is established (peer-to-peer). Otherwise,
+if no $k$ can be found, the search will eventually hit the timeout and
+fail. From a botmaster's perspective, it makes sense to associate one
+command with a number of different $k$. Storm for example creates 32
+random-generated keys for every single command, every
+day.\cite{wang2009systematic} This way, the command is sent to other
+subnetworks, distributing the command nicely within the botnet.
+
 Depending on the architecture of the P2P net (cf. \ref{architecture}),
 the index might be stored in a central position (Napster-like
-filesharing systems), or be distributed over a larger number of
-nodes.  In the latter case, usually only a part
-of the file index is available on a peer. If a peer doesn't have the
-key $k$ a client is searching for in its hash map, it forwards this
-search to its neighbours, so that in the end, the client will receive
-a pair of $<k, m>$ for any given $k$, given the network is healthy and
-there exists a $k$ at all.
+filesharing systems), or be distributed over a larger number of nodes.
+In the latter case, usually only a part of the file index is available
+on a peer. If a peer doesn't have the key $k$ a client is searching
+for in its hash map, it forwards this search to its neighbours, so
+that in the end, the client will receive a pair of $<k, m>$ for any
+given $k$, given the network's churn is healthy and there exists a $k$
+at all.
 
 Instead of providing information on where to find a certain content as
 in file sharing networks, botmasters insert the actual command to be
-executed by the bot into the record.  In order to get commands issued
+executed by the bots into the record.  In order to get commands issued
 by botmasters, bots periodically initiate queries for a set of $k$,
 and nodes which preserve the corresponding records will return query
-hits with commands encoded. Thus, using file indices implies using
+hits with the commands encoded. Thus, using file indices implies using
 pull mechanism. \cite{liang2006index}
 
 \subsection{C\&C in unstructured P2P networks}
-Dezentralized: Peacom p.7 in 10.1.1.112.3561.pdf
-see p. 3 in 10.1.1.153.8296
-
-<TODO> unstructured P2P 
-
 In contrast to the structured P2P C\&C, in unstructured C\&C a bot
 won't ever actively contact other bots. Instead, it listens to
-incoming connections.  \cite{liang2006index}
+incoming connections.  \cite{li2009botnet} Thus, instead of searching
+a path to the nearest node with a similar hash ID, in unstructured
+P2P, the network gets ``flooded'' with query messages, generating more
+overhead traffic.
 
 
-When commands are pushed in P2P networks, this implies a more complex infrastructure. \cite{li2009botnet} formulate two problems to be dealt with:
-\begin{list}
-\item Which bots should a command be forwarded to?
-\item How should the commands be forwarded (only relevant for leeching
-  and parasite botnets)? Using {\it in-band} (normal P2P traffic) or
-  {\it out-of-band} (non-P2P traffic) communication?
-\end{list}
+When commands are pushed in P2P networks, this implies a more complex
+infrastructure. \cite{wang2009systematic} formulate two problems to be dealt
+with:
 
--> Scurn of network
+\begin{itemize}
+\item {\bf To which peers should a received command be forwarded?}
 
-Compared to pull mechanism, implementation of push
-mechanism on existing P2P protocols is more complex. There
-are two major design issues:
-• Which peers should a bot forward a command to?
-• How to forward commands: using in-band (normal P2P
-traffic) or out-of-band messages (non-P2P traffic)?
-To address the first issue, the simplest way is to let a bot
-use its current neighboring peers as targets. But the problem
-of this approach is that command distribution may be slow
-or sometimes disrupted, because 1) some bots have a small
-number of neighbors, or 2) some peers in a bot’s neighbor list
 
+One solution would be to distribute a command to a bot's neighbouring
+peers. However, this might make command distribution slow and
+incomplete, since many bots have a small number of neighbours
+(cf. figure \ref{distributiongraph} on page
+\pageref{distributiongraph}). Additionally, in parasite and leeching
+botnets not all neighbours are running the bot, thereby not being
+able to receive the commands.
+
+
+Another solution to the problem is for the bots to search for some
+predefined Keys $k$. All bots are programmed in such a way that they
+answer to have that Key available. Then commands are distributed to
+all the peers that answered the search for the $k$. However, this
+might make the botnet targetable to attacks, as one only has to know
+the right $k$ to find all bots. \cite{wang2009systematic} call those
+$k$ figuratively ``watchwords''.
+
+\item {\bf How should the commands be forwarded?}
+
+There are two possible ways of forwarding a command: Using {\it
+  in-band} (normal P2P traffic) or {\it out-of-band} (non-P2P traffic)
+communication. This question is only relevant to leeching and
+parasite botnets.
+
+In-band messages are the safest choice in terms of robustness of the
+botnet, but only work if a bot targets its neighbouring
+peers\cite{wang2009systematic}. By using in-band traffic, it is hard
+for attackers to differentiate between ``normal'' P2P traffic and the
+botnet's C\&C. In-band messages have the downfall that a bot cannot
+communicate with more remote peers, but only with those peers that it
+would normally exchange information with. This might cause command
+distribution to be slow and incomplete.
+
+Out-Of-Band messages do not share this restriction, as any bot can
+simply open a connection with any other bot in the network. However,
+it is easy to detect and trace out-of-band messages, since they stand
+out from the usual P2P traffic. 
+
+How can a bot know about another bot which is not in its neighbouring
+peer list at all? It could have been found through a search for
+certain watchwords (see above). Then, to contact the other bot for
+exchange of commands, a special request for connection has to be
+made. Exactly this step could diguise the two bots to an attacker of
+the botnet.
+\end{itemize}
 
 
 \section{Architectures of Botnets}
