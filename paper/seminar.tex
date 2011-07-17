@@ -14,6 +14,7 @@
 \usepackage{graphicx}
 %% Paket für Unterabbildungen pro Abbildung
 %\usepackage{subfig}
+\usepackage{todonotes}
 
 % Titel der Arbeit
 \title{Peer-To-Peer in Botnets}
@@ -36,9 +37,29 @@
 
 %------------------------------------------------------------------------------
 \begin{abstract}
+In this work, we describe a relatively novel means of communication in
+botnets, namely {\it peer-to-peer} communication.  
+
+While many users are familiar with P2P file sharing, the term has
+attracted more attention latetly as malicious botnets such as the
+Stuxnet have emerged, causing real-world damage.
+
+We start by introducing common botnet terminology. We then give a
+classification of P2P botnets and distinguish different architectures
+of botnets. In the following sections, we describe the typical
+lifetime of a P2P botnet, the command and control structure in P2P
+botnets, comparing conventional botnets to P2P botnets. In the
+remainder of this review paper we described possible countermeasures
+against P2P botnets and draw conclusion on what types of botnets to
+expect in the future.
+\end{abstract}
+
+%------------------------------------------------------------------------------
+\section{Introduction}
+
 Cyber-attacks are a growing threat to the security of the world. As a
 result, in June of 2011, the German government founded a ``national
-defense centre against cyber crime''.\cite{cyber} This step became
+defence centre against cyber crime''.\cite{cyber} This step became
 necessary as new forms of computer worms are no longer restricted to
 harming only computers and the data stored on them, as the example of
 ``Stuxnet'' demonstrates:
@@ -49,27 +70,13 @@ harming only computers and the data stored on them, as the example of
  update, Stuxnet used Internet and Intranet structures to build its
  own {\it botnet}.\cite{fallierew32} Stuxnet is in alignment with a series
  of new botnets using {\it peer-to-peer} communication instead of a
- centralized server. 
+ centralised server. 
 
 This literature review paper focuses on these peer-to-peer botnets and
 the growing threat emerging from them. Having read this article, the
 reader will be well-informed about current and future techniques in
 peer-to-peer botnets.
-\end{abstract}
 
-%------------------------------------------------------------------------------
-\section{Introduction}
-
-In this work, we describe a new means of communication in botnets,
-namely {\it peer-to-peer} communication.  We motivate the research on
-botnets by recent real-world examples and introduce common botnet
-terminology. We give a classification of P2P botnets and distinguish
-different architectures of botnets. In the following sections, we
-describe the typical lifetime of a P2P botnet, the command and control
-structure in P2P botnets, comparing conventional botnets to P2P
-botnets. In the remainder of this review paper we described possible
-countermeasures against P2P botnets and draw conclusion on what types
-of botnets to expect in the future.
 
 
 \section{Definitions}
@@ -85,7 +92,7 @@ providing the aggregated CPU resources of the botnet, stealing user's
 credentials \cite{borgaonkar2010analysis} or doing click fraud on
 affiliate networks\cite{clickFraud}. Click fraud is the process of
 generating clicks on web banners without an actual user seeing or
-clicking the advertisment, for the sake of making money. 
+clicking the advertisement, for the sake of making money. 
 
 In the following, We propose a bias-free definition of botnet as per
 our understanding technology is generally ethics-free. Additionally,
@@ -105,8 +112,8 @@ recent years. P2P defines an unstructured information network
 amongst equals --- so-called peers. Two or more peers can
 spontaneously exchange information without a central
 instance. According to \cite{schoder2005core} ``P2P networks promise
-improved scalability, lower cost of ownership, self-organized and
-decentralized coordination of previously underused or limited
+improved scalability, lower cost of ownership, self-organised and
+decentralised coordination of previously underused or limited
 resources, greater fault tolerance, and better support for building ad
 hoc networks.''  These properties coupled with the fact that files
 exchanged in P2P networks are prone to malware, trojans and viruses
@@ -129,9 +136,9 @@ thus become the one of the most widely-used protocols for C\&C in
 conventional botnets.
 
 The process of {\it bootstrapping} generally describes starting a more
-complex system outof a simple system. In regard to botnets, the
+complex system out of a simple system. In regard to botnets, the
 term usually means loading of the bot code (often injected into the
-original filesharing program) and establishing a connection to other
+original file sharing program) and establishing a connection to other
 bots.\cite{wang2009systematic}
 
 
@@ -154,7 +161,7 @@ botnet to make use of P2P for C\&C.\cite{li2009botnet}
 
 There have been many more P2P botnets created since, most notably
 perhaps the Phatbot and Storm botnets. Phatbot (also called Agobot,
-Gaobot) became reknown for its large set of built-in attacks ranging
+Gaobot) became renowned for its large set of built-in attacks ranging
 from password sniffing to DOS.\cite{cooke2005zombie} The storm botnet
 which exists in several different versions was described ``as one of
 the most sophisticated botnet[s] active
@@ -190,7 +197,7 @@ spread of the bot is limited to the size of the P2P network.
 
 In contrast, leeching bots not only try to infiltrate systems which
 are already part of the P2P network, but also systems outside of the
-P2P network. Natuarally, they are bigger in size as they have to
+P2P network. Naturally, they are bigger in size as they have to
 deliver the P2P client, too. This might be more difficult to achieve
 as it means that systems must unwillingly take part in the
 network. Often, firewalls and port-forwarding are not configured for
@@ -199,7 +206,7 @@ the botnet: Since the owner of the computer usually doesn't even know
 he is participating in a P2P network, he has no intention of opening
 the ports in his firewall. Leeching bots can spread through any
 possible measure: File sharing, downloads on websites, email
-attachments and instant messanging.
+attachments and instant messaging.
 
 There are good reasons for either strategy: Using an existing P2P
 network as a base --- like parasite and leeching bots do --- unburdens
@@ -208,7 +215,7 @@ profits from the established P2P network, making use of filtering,
 error-correction and encryption as far as the chosen network has
 support for it. On the other hand, features are limited to the
 existing P2P protocol. A specifically-built P2P bot-only network is
-natuarally more tailored towards its purpose. Due to the bot-exclusive
+naturally more tailored towards its purpose. Due to the bot-exclusive
 memberships, it might be easier to shutdown the botnet for an attacker
 as all participants can be considered bots and there is no risk of
 accidentally shutting down an innocent member. Bot-only networks are
@@ -241,12 +248,12 @@ system. \cite{stutzbach2006understanding}
 
 \section{Command and Control structures in botnets}
 In this section, we give an overview of the C\&C typically used in P2P
-botnets and compare it to the C\&C in centralized architectures. The
+botnets and compare it to the C\&C in centralised architectures. The
 differences in C\&C are the most notable differences between the two,
 apart from the architecture itself (cf. \ref{architecture}). There
 exist three fundamentally different forms of C\&C in botnets:
-Centralized C\&C, P2P C\&C and unstructured C\&C. After clarifying the
-differences between push and pull communciation, we explain the three
+Centralised C\&C, P2P C\&C and unstructured C\&C. After clarifying the
+differences between push and pull communication, we explain the three
 approaches.
 
 
@@ -255,7 +262,7 @@ approaches.
 Commands can be distributed in two ways: Either via a push or a pull
 mechanism. ``Pulling'', being the more trivial of the two approaches,
 is the process of a client actively asking a server whether there's
-new instructions for it. To be up-to-date this has to be perforemd
+new instructions for it. To be up-to-date this has to be performed
 periodically, increasing network load.  Push on the other hand is
 technically more advanced, as commands from the server will be
 automatically ``forwarded'' to the clients --- the difference between
@@ -267,8 +274,8 @@ advantage of reducing the network traffic, but it requires that the
 server can open a connection to the clients (cf. \ref{nat}).
 
 
-\subsection{C\&C in centralized networks}
-C\&C in centralized networks is more straight-forward than in P2P
+\subsection{C\&C in centralised networks}
+C\&C in centralised networks is more straight-forward than in P2P
 networks. The central servers receive their instructions directly from
 the botmaster. Only he has access to those resources, so there is no
 problem of authentication as in P2P networks
@@ -295,10 +302,10 @@ files from the bots.
 Almost all P2P file sharing systems have so-called {\it indices}, in
 which they map a desired content to a location where it can be found
 (IP address and port). An index can thus be considered as a ``lookup
-table'' for finding the information where a user can retreive a
+table'' for finding the information where a user can retrieve a
 certain content he searches for. In terms of botnets, this usually
 resembles the place where a bot can find its orders. Therefore,
-indices are a vital part of any such P2P system emplyoing them.
+indices are a vital part of any such P2P system employing them.
 
 File indices are typically implemented using a hashed map. For
 botnets, file indices are usually used not to publish the location of
@@ -307,7 +314,7 @@ the format $<k, m>$, where $k$ is the key under which to store the
 command $m$.
 
 In order to find a search result for a query $q$, in structured P2P
-networks such as Overnet, the following algortihm is used: $q$ is
+networks such as Overnet, the following algorithm is used: $q$ is
 directed to nodes whose IDs are closer to the queried hash key. If it
 finally finds a peer which can offer the searched $k$, a direct
 connection between the two is established (peer-to-peer). Otherwise,
@@ -316,11 +323,11 @@ fail. From a botmaster's perspective, it makes sense to associate one
 command with a number of different $k$. Storm for example creates 32
 random-generated keys for every single command, every
 day.\cite{wang2009systematic} This way, the command is sent to other
-subnetworks, distributing the command nicely within the botnet.
+sub-networks, distributing the command nicely within the botnet.
 
 Depending on the architecture of the P2P net (cf. \ref{architecture}),
 the index might be stored in a central position (Napster-like
-filesharing systems), or be distributed over a larger number of nodes.
+file sharing systems), or be distributed over a larger number of nodes.
 In the latter case, usually only a part of the file index is available
 on a peer. If a peer doesn't have the key $k$ a client is searching
 for in its hash map, it forwards this search to its neighbours, so
@@ -366,7 +373,7 @@ Another solution to the problem is for the bots to search for some
 predefined Keys $k$. All bots are programmed in such a way that they
 answer to have that Key available. Then commands are distributed to
 all the peers that answered the search for the $k$. However, this
-might make the botnet targetable to attacks, as one only has to know
+might make the botnet target-able to attacks, as one only has to know
 the right $k$ to find all bots. \cite{wang2009systematic} call those
 $k$ figuratively ``watchwords''.
 
@@ -395,7 +402,7 @@ How can a bot know about another bot which is not in its neighbouring
 peer list at all? It could have been found through a search for
 certain watchwords (see above). Then, to contact the other bot for
 exchange of commands, a special request for connection has to be
-made. Exactly this step could diguise the two bots to an attacker of
+made. Exactly this step could disguise the two bots to an attacker of
 the botnet.
 \end{itemize}
 
@@ -406,7 +413,7 @@ In reality, there exist two principally different architectures of
 botnets. A new architecture has been proposed by scientists, which
 combines the advantages of both. The following nomenclature is
 extracted from \cite{steggink2007detection}:
-\subsection{Centralized Architecture}
+\subsection{Centralised Architecture}
 %
 % Das Bild aus Buch soundso von Seite soundso
 %
@@ -415,17 +422,17 @@ extracted from \cite{steggink2007detection}:
   \fbox{
     \includegraphics[width=0.8\textwidth]{figures/central-network.png}
   }
-  \caption{Graph depicting connections in a centralized network. Note
+  \caption{Graph depicting connections in a centralised network. Note
     how all bots only have a connection to the central point. (Source: Own work)}
   \label{central-network}
 \end{figure}
-Historically the oldest form of botnets, centralized architectures are
+Historically the oldest form of botnets, centralised architectures are
 built up in such a way that there is one central spot which broadcasts
 messages between the connected bots and the botmaster.  It's common to
 have more than one central server\cite{td1sc}, but even with several
-servers, the architecture still stays centralized. For if you shutdown
+servers, the architecture still stays centralised. For if you shutdown
 this central point, the network is inoperable. This resembles the
-biggest weakness of centralized architectures: As soon as you are able
+biggest weakness of centralised architectures: As soon as you are able
 to cut the server off the net, the network is dead. On the other hand,
 latency becomes minimal, as the routing distance for one package
 needed to reach each node in the network is minimal (only one
@@ -433,10 +440,10 @@ transition is needed). Bandwidth, however, is generally limited by the
 server's resources, making it hard to receive or transmit big chunks
 of data. Furthermore, it holds that all the routes in the network have
 the same length. This is something which is fundamentally more complex
-in decentralized networks and can be a great simplification of command
+in decentralised networks and can be a great simplification of command
 distribution and monitoring the network.
 
-Due to their nature, centralized architectures are usually implemented
+Due to their nature, centralised architectures are usually implemented
 with an IRC C\&C or similar\cite{cooke2005zombie}. The central server
 is normally not owned by the botmaster. This would make detecting his
 identity easy. In many countries, launching an ``evil-minded botnet''
@@ -445,24 +452,24 @@ the central C\&C node. A connection from the attacker's computer to
 the central server is often obfuscated by many in-between relays,
 tunnels and encryption. In figure
 \ref{central-network} this is shown as the ``steeping stones'' which
-shall hide an attacker's idenity.
+shall hide an attacker's identity.
 
-\subsection{Decentralized Architecture}
+\subsection{Decentralised Architecture}
 \label{decent}
-Dezentralized architectures do not rely on the special role of one
+Decentralised architectures do not rely on the special role of one
 central server. Instead, they are built upon the principal of
 equality, namely that the ``peer nodes (both client and server) are
 all equal''\cite{steggink2007detection}. The topology of the network
-is far more complex than in centralized architectures, forming a mesh
+is far more complex than in centralised architectures, forming a mesh
 as shown in figure \ref{p2p-network}. It is thus more difficult for a
 bot to join the botnet. Extensive bootstrapping is required, as the
 bot has to figure out an already-participating peer to connect to in the
 beginning. Once inside the net, information about other peers is
 exchanged between nodes. There are two approaches for bootstrapping\cite{wang2009systematic}:
 \begin{itemize}
-\item A list of peers likely to be online is hardcoded into the client. This list can later be updated
+\item A list of peers likely to be online is hard-coded into the client. This list can later be updated
 \item A shared web cache on the internet stores information about
-  peers. The address of which is hardcoded.
+  peers. The address of which is hard-coded.
 \end{itemize}
 
 As can be seen, Bootstrapping is a critical and vulnerable point in
@@ -478,29 +485,29 @@ has to be assured that the message reaches all clients. As a general
 rule of thumb, the better inter-connected the nodes are, the higher
 the probability for a message to reach all recipients.
 
-A decentralized network has the advantage of having the accumulated
+A decentralised network has the advantage of having the accumulated
 resources and bandwidth of all the peers in the network
 available. However, latency might be bad, as routing through the
 network is not trivial (cf. figure \ref{p2p-network}). P2P networks
-are generally considerd to be harder to disable (cf. section
+are generally considered to be harder to disable (cf. section
 \ref{counter-measure} on page \pageref{counter-measure}).
 
-It is to be discussed whether P2P networks with a centralized server
+It is to be discussed whether P2P networks with a centralised server
 architecture for certain services like file-indexing --- we refer to
-them as ``Napster-like'' botnets --- fall into the ``decentralized''
+them as ``Napster-like'' botnets --- fall into the ``decentralised''
 category. Principally, the connection graph differs a lot from
-centralized networks, but centralized and Napster-like networks share
+centralised networks, but centralised and Napster-like networks share
 the same weaknesses, as could be seen when Napster was shut down in
 2001\cite{napsterWiki}.\footnote{This was performed as an act of
-  cofirming with the decision made in the intellectual property case
+  confirming with the decision made in the intellectual property case
   of US A&M Records, Inc. v. Napster, Inc., 239 F.3d 1004 (2001) and
   not an explicit attack against the Napster network, but the fact
   that the Napster network could so easily stop the network by just
   disconnecting its central server shows the inherent weakness of
-  centralized architectures.}  Dittrich et
+  centralised architectures.}  Dittrich et
 al. \cite{dittrich2007command} would consider Napster-like botnets a
 hybrid architecture, whereas Steggink et al.
-\cite{steggink2007detection} classify it as decentralized. In the
+\cite{steggink2007detection} classify it as decentralised. In the
 following, we stick with Steggink's definition, as there seems to be a
 broader consensus in the literature towards their nomenclature
 (cf. \cite{td1sc}).
@@ -522,20 +529,20 @@ Hybrid architectures are botnet architectures driven by scientific
 development and up to this date only exist in theory. They have been
 described as ``the advanced P2P botnet''\cite{td1sc} and the ``super
 botnet''\cite{vogt2007army}. The approach is to study current botnets,
-analyze their weaknesses and propose a better solution. This
+analyse their weaknesses and propose a better solution. This
 anticipates how botmasters could improve their botnets in the
 future. This way, even today, we know what future botnets could look
 like and how to better defend against them.
 
 The proposed new hybrid P2P botnets do not have a pre-set
-communication architecture, following the strict P2P definiton. Their
+communication architecture, following the strict P2P definition. Their
 network connectivity is solely determined by the {\it peer list} in
 each bot.
 
 Only machines with static IPs appear as bots in the peer list,
-so-called {\it servents}.\cite{td1sc} This way, it is guranteed that
+so-called {\it servents}.\cite{td1sc} This way, it is guaranteed that
 the distributed peer lists are maximally deadlink-free.  This is a
-specialization of the ``all peers are equal'' contract in P2P: Some
+specialisation of the ``all peers are equal'' contract in P2P: Some
 bots --- the servents --- have special obligations described in the
 following.  The clients are then typically bots behind firewalls,
 machines with private or dynamic IPs.
@@ -605,7 +612,7 @@ likely to become successful in a real world scenario:
   or dynamic IP address) in the real world.
 \item Even though Vogt et al. demonstrated the robustness of their
   constructed botnet (cf. \cite{vogt2007army}), they rely on the
-  assumption that enough reinfections will occcrr during the early
+  assumption that enough reinfections will occur during the early
   lifetime of the botnet, namely the buildup-phase. According to
   \cite{td1sc} this is a false assumption as heavy reinfection-seeking
   during buildup will lead to easy detection of the botnet and a lot
@@ -688,13 +695,13 @@ infected zombie by the machine infecting it. Due to its fixed size
 peer list ($M=20$ in the simulations for \ref{distributiongraph},
 \ref{distributiongraph2}), when an attacker gets access to a bot, it
 doesn't reveal whole (sub-)nets.  Only machines with static IPs appear
-as peer bots, so-called {\it servents}. This way, it is guranteed that
+as peer bots, so-called {\it servents}. This way, it is guaranteed that
 the distributed peer lists are maximally deadlink-free. Data
 encryption in the hybrid P2P botnet has two functions: First, it makes
 it hard to sniff for patterns in internet traffic to detect a possible
 botnet. Second, the authenticity of the issued commands can be
 verified so that only commands signed by the botmaster are
-executed. The bot software can be shipped with a hardcoded public key
+executed. The bot software can be shipped with a hard-coded public key
 from the botmaster.
 
 \begin{figure}[htbp]
@@ -706,9 +713,9 @@ from the botmaster.
   \label{central-network2}
 \end{figure}
 
-Compared to a central-strucutre botnet (see \ref{central-network2}),
+Compared to a central-structure botnet (see \ref{central-network2}),
 the hybrid P2P net (see \ref{hybrid-network}) is only an extension of the
-orginial network: It is essentially equivalent to a central
+original network: It is essentially equivalent to a central
 architecture P2P net. However, the amount of servers (in the form of
 servents) is greatly increased, as is the number of interconnections
 between them. The great number of servents is the primary reason why
@@ -716,10 +723,10 @@ the hybrid P2P botnet is supposedly very hard to shut
 down.\cite{td1sc}
 
 As tempting as such an advanced new botnet protocol may sound, it has
-to be acknowedlged that the hybrid P2P botnet is a purely academical,
+to be acknowledged that the hybrid P2P botnet is a purely academical,
 theoretical idea that has never been tested in practice: ``The network
 may not be as stable and robust as expected due to complex network
-conditions and defenses.''\cite{wang2009systematic}
+conditions and defences.''\cite{wang2009systematic}
 
 
 \section{Detection of and countermeasure against evil P2P botnets}
@@ -739,13 +746,13 @@ perspective:
 \begin{itemize}
 \item Detecting the botnet at all, which can be very difficult for P2P
   parasite and leeching networks, as a separation between ``bot'' P2P
-  and ``real'' P2P datastreams has to be made. In
+  and ``real'' P2P data streams has to be made. In
   \cite{steggink2007detection} it was shown that the bot Storm
   (therein referred to as ``Peacomm'') uses a fixed package size for
   95\% of its communication: 67 bytes (72,1\% of traffic) and 60 bytes
   (23,3\%). If you find this atypical package size profile in a P2P
   network, it's likely to be infected by Storm.
-\item Analyzing the botnet: Finding the servers (if there are any) and
+\item Analysing the botnet: Finding the servers (if there are any) and
   participating zombies. It is also helpful to be able to estimate the
   size of the botnet. When using a technique like sybil attacks, this
   gives an estimation of how many resources are needed, i.e. how much
@@ -754,7 +761,7 @@ perspective:
   exploit of the bot's injection vector. Most often, when a bot
   installs itself unnoticed from the owner ({\it injection}), it does so by
   using a security problem ({\it exploit}) in the software. If the
-  manufactorer fixes and updates this security hole, spread of the bot
+  manufacturer fixes and updates this security hole, spread of the bot
   cannot continue on upgraded systems.
 \item Disabling the bot(sub-)nets: Making clients loose
   inter-connection (in P2P networks), shutting down central servers
@@ -767,16 +774,16 @@ It must be noted that these tasks are of generic nature and might not
 be applicable to the botnet at hand. However, they represent a solid
 way of taking down a botnet.
 
-While it is --- in theory --- realtivley easy to shutdown a
-centralized architecture by determining the central servers and
+While it is --- in theory --- relatively easy to shutdown a
+centralised architecture by determining the central servers and
 disabling those (e.g. through DoS attacks\footnote{Denial of Service
   attacks, i.e. generating so much traffic the target cannot function
   normally any more}), P2P networks are arguably harder to disable,
-given they are properly protected. The legal implcations of shutting
+given they are properly protected. The legal implications of shutting
 down a botnet are also to be considered: When proven to be malicious,
 it is possible for the police to get a warrant to cut-off the servers
-physically from the net. This cannot pratically be done for
-non-centralized P2P networks, since the bots are usually private
+physically from the net. This cannot piratically be done for
+non-centralised P2P networks, since the bots are usually private
 property, with their owners unwillingly taking part in the
 botnet. Additionally they exist in so great masses that a physical
 take-down would be impossible to coordinate.
@@ -813,16 +820,16 @@ in fighting two recent P2P bots, namely Trojan.Peacomm and
 Stormnet. (\cite{grizzard2007peer}, \cite{liang2006index})
 
 
-\subsubsection{A botmaster's counterdefence: Authentication of commands}
+\subsubsection{A botmaster's counter-defence: Authentication of commands}
 It is an inherent property of any P2P network that any peer can and
 should distribute commands. However, how can one achieve that only the
-botmaster's commands are distributed and executed? In a centralized
+botmaster's commands are distributed and executed? In a centralised
 architecture, this is relatively easy to assure: Only the botmaster
 has the password to the servers, so only he can log onto them and
 issue new commands. However, with P2P networks an encryption mechanism
 for the commands must be implemented, such as GPG\cite{GPG}. The
 botmaster signs (and possibly even encrypts) his commands with his
-private GPG key. By supplying the botclients with the botmaster's
+private GPG key. By supplying the bot clients with the botmaster's
 public key, they can authenticate the issuer of the command in
 question. As it is very difficult to calculate the private key based
 on the public key, bots can be assured that the issuer of the command
@@ -831,7 +838,7 @@ $<k, m>$ , see \ref{distribution}) could be enriched with a new column
 $H(m)$, where $H(m)$ is the hash value of $m$, i.e. the signature of
 the command.\cite{wang2009systematic} To verify $m$ has been issued by
 the botmaster, a bot takes $H(m)$ and checks if it has been properly
-signed by applying the hardcoded public signature to it.
+signed by applying the hard-coded public signature to it.
 
 
 \subsection{Sybil attack}
@@ -839,10 +846,10 @@ signed by applying the hardcoded public signature to it.
 A {\it sybil attack} on a botnet is a form of attack where large
 quantities of fake nodes (the so-referred to sybils) are inserted into
 the botnet. By infiltrating the botnet's peer list, the sybils try to
-interrupt the C\&C between real bots. In contrast to the more statical
+interrupt the C\&C between real bots. In contrast to the more static
 pollution attack, a sybil attack requires the attacker to have active
 hardware acting as the sybils and also to take part in the P2P
-network. Note however, that it is not neccessary and even
+network. Note however, that it is not necessary and even
 contra-indicative for the sybils to execute or distribute the commands
 sent over the P2P network's C\&C structures. The idea of the sybil
 attack lies in the fact that there exist so many sybils in the network
@@ -853,11 +860,11 @@ Generally speaking, it is more expensive to run a sybil attack than an
 index-poisoning attack, as the former requires far more infrastructure
 at the disposal of the attacker.
 
-\subsubsection{A botmaster's counterdefence}
-Botmasters could utilize known P2P technique to fight against the
+\subsubsection{A botmaster's counter-defence}
+Botmasters could utilise known P2P technique to fight against the
 weakness of sybil attacks: According to \cite{douceur2002sybil}, it is
 common practice for a P2P system to distribute computational or
-stoarge tasks among remote peers to protect against the threat of
+storage tasks among remote peers to protect against the threat of
 hostile peers. For if a complete task is given to a hostile peer only,
 chances are the task is never executed and completely lost. However,
 this risk is mitigated when the task is replicated to several peers,
@@ -875,11 +882,11 @@ the Storm botnet.\cite{davis2008sybil}
 
 \subsection{Compromising Bootstrapping}
 Bootstrapping is a vulnerable point in any P2P botnet. When a
-hardcoded peer list is used (cf. \ref{decent} for details), it is
+hard-coded peer list is used (cf. \ref{decent} for details), it is
 sufficient to take down all the peers in the bootstrapping table for
 the network to eventually shutdown: New bots simply can't find an
 initial peer to connect to. Botmasters have reacted to this by
-providing a Gnutella-like web-cache or updateable bootstrapping
+providing a Gnutella-like web-cache or update-able bootstrapping
 tables. As interrupting the bootstrapping process can so easily be
 done, it has been completely removed in the hybrid botnets
 (cf. \ref{hybridimprovs} on page \pageref{hybridimprovs}).
@@ -892,19 +899,19 @@ when employing the index poisoning technique, our understanding and
 findings, as shown in this paper, are substantially different and
 backed-up by both reason and literature (\cite{zou2006honeypot},
 \cite{berger2009exploiting},
-\cite{steggink2007detection}). Additionally, new P2P protcols can be
-made resistent to index poisoning (shown in the same paper,
-\cite{wang2009systematic}), or file indices can be completely ommited,
+\cite{steggink2007detection}). Additionally, new P2P protocols can be
+made resistant to index poisoning (shown in the same paper,
+\cite{wang2009systematic}), or file indices can be completely omitted,
 whereas the central nature of the servers remains a single point of
-failure in centralized architectures.
+failure in centralised architectures.
 
 In fact, because they are harder to disable, more agile and dynamic in
 their lives, we believe that P2P botnets will play an ever-growing
 role in the future. It can also be cheaper to setup a P2P botnet,
-since there are no costs for central servers. Centralized
+since there are no costs for central servers. Centralised
 architectures on the other hand have been seen to decline and will
-probably continue to do so. Also, some signifcant research for
-improvement in the exisiting P2P protocols has been conducted,
+probably continue to do so. Also, some significant research for
+improvement in the existing P2P protocols has been conducted,
 removing many of the current weaknesses of P2P architectures.
 
 
