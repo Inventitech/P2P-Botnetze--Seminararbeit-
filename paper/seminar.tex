@@ -37,24 +37,22 @@
 
 %------------------------------------------------------------------------------
 \begin{abstract}
-In this work, we describe a relatively novel means of communication in
-botnets, namely {\it peer-to-peer} (P2P) communication.  
+In this literature review paper, we describe a relatively novel means
+of communication in botnets, namely {\it peer-to-peer} (P2P)
+communication.  While many users are familiar with P2P file sharing,
+the term has attracted more attention lately as malicious botnets such
+as Storm\cite{davis2008sybil} have emerged, causing quantifiable
+real-world damage.
 
-While many users are familiar with P2P file sharing, the term has
-attracted more attention lately as malicious botnets such as Rustock\cite{rustock} have emerged, causing quantifiable real-world damage.
-
-We start by introducing common botnet terminology. We then give a
-classification of P2P botnets and distinguish different architectures
-of botnets. We then describe the typical lifetime of a P2P botnet, the
-command and control structure in P2P botnets, comparing conventional
-botnets to P2P botnets. In the remainder of this review paper we
-describe possible countermeasures against P2P botnets and draw
-conclusions on what types of botnets to expect in the future.
+We explain P2P botnets and compare them to conventional ones. We
+describe possible countermeasures against P2P botnets and give an
+outlook into the future of botnets.
 \end{abstract}
 
 %------------------------------------------------------------------------------
 \section{Introduction}
 
+%\subsection{Motivation for Research on P2P botnets}
 Cyber-attacks are a growing threat to the security of the world. As a
 result, in June of 2011, the German government founded a ``national
 defence centre against cyber crime''.\cite{cyber} This step became
@@ -66,15 +64,25 @@ harming only computers and the data stored on them, as the example of
  suspected to have damaged Iran's uranium centrifuges, giving it the
  title ``the first cyber weapon''\cite{benzin2011first}. To spread and
  update, Stuxnet used Internet and Intranet structures to build its
- own {\it botnet}.\cite{fallierew32} Stuxnet is in alignment with a series
- of new botnets using {\it peer-to-peer} communication instead of a
- centralised server. 
+ own {\it botnet}.\cite{fallierew32} Although Stuxnet didn't try to
+ build an armada of bots like most other bots do, Stuxnet is in
+ alignment with a series of new botnets using {\it peer-to-peer}
+ communication instead of a centralised server.
 
-This literature review paper focuses on these peer-to-peer botnets and
-the growing threat emerging from them. Having read this article, the
+This review paper focuses on these peer-to-peer botnets and the
+growing threat emerging from them. Having read this article, the
 reader will be well-informed about current and future techniques in
 peer-to-peer botnets.
 
+\subsection*{Outline}
+We start by introducing common botnet terminology. We then give a
+classification of P2P botnets and distinguish different architectures
+of botnets. In the following sections, we describe the typical
+lifetime of a P2P botnet, the command and control structure in P2P
+botnets, comparing conventional botnets to P2P botnets. In the
+remainder of this review paper we described possible countermeasures
+against P2P botnets and draw conclusion on what types of botnets to
+expect in the future.
 
 
 \section{Definitions}
@@ -85,7 +93,7 @@ forming a common network structure.\cite{schoof2007detecting} In most
 recent papers on the subject (\cite{wang2009systematic},
 \cite{abu2006multifaceted}), the term botnet is defined as purely
 negative, i.e. a network performing destructive aims such as
-denial-of-service attacks\footnote{also: DoS attacks,
+denial-of-service attacks\footnote{Abbreviated: DoS attacks,
   i.e. generating so much traffic the target cannot function normally
   any more}, sending spam or hosting a phishing
 website\cite{steggink2007detection}. Other common aims include
@@ -356,7 +364,7 @@ hits with the commands encoded. Thus, using file indices implies using
 pull mechanism. \cite{liang2006index}
 
 \subsection{C\&C in unstructured P2P networks}
-In contrast to the structured P2P C\&C in unstructured C\&C a bot
+In contrast to the structured P2P C\&C, in unstructured C\&C a bot
 won't ever actively contact other bots. Instead, it listens to
 incoming connections.  \cite{li2009botnet} Thus, instead of searching
 a path to the nearest node with a similar hash ID, in unstructured
@@ -532,14 +540,15 @@ broader consensus in the literature towards their nomenclature
 \begin{figure}[htbp]
   \centering
   \fbox{
-    \includegraphics[width=0.8\textwidth]{figures/p2p-network.png}
+    \includegraphics[width=0.9\textwidth]{figures/p2p-network.png}
   }
   \caption{An exemplary P2P network. The botmaster can be a regular
-    peer, a servent/server (whatever the name in the underlying P2P
-    network) or both. In contrast to other peers he injects new
-    commands to be forwarded by others. It might make sense for the
-    botmaster to own a few peers or servents, as this makes command
-    distribution faster and increases his control over the network.}
+    peer, a servent/super peer/server (whatever the corresponding name
+    in the underlying P2P network may be) or both. In contrast to other peers
+    he injects new commands to be forwarded by others. It might make
+    sense for the botmaster to own a few peers or servents, as this
+    makes command distribution faster and increases his control over
+    the network.}
   \label{p2p-network}
 \end{figure}
 
@@ -770,7 +779,7 @@ perspective:
   and ``real'' P2P data streams has to be made. For example, in
   \cite{steggink2007detection} it was shown that the bot Storm
   (therein referred to as ``Peacomm'') uses a fixed package size for
-  95\% of its communication: 67 bytes (72,1\% of traffic) and 60 bytes
+  95,4\% of its communication: 67 bytes (72,1\% of traffic) and 60 bytes
   (23,3\%). If one finds this atypical package size profile in a P2P
   network, it's likely to be infected by Storm.
 \item {\bf Analysing the botnet:} Finding the servers (if there are any) and
@@ -935,6 +944,9 @@ probably continue to do so. Also, some significant research for
 improvement in the existing P2P protocols has been conducted,
 removing many of the current weaknesses of P2P architectures.
 
+\section*{Acknowledgement}
+We would like to express our gratitude to Fabian Streitel for
+reviewing this paper.
 
 %------------------------------------------------------------------------------
 \bibliographystyle{alpha}
