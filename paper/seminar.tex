@@ -65,9 +65,9 @@ harming only computers and the data stored on them, as the example of
  title ``the first cyber weapon''\cite{benzin2011first}. To spread and
  update, Stuxnet used Internet and Intranet structures to build its
  own {\it botnet}.\cite{fallierew32} Although Stuxnet didn't try to
- build an armada of bots like most other bots do, Stuxnet is in
- alignment with a series of new botnets using {\it peer-to-peer}
- communication instead of a centralised server.
+ build an armada of infected computers like most other bots do,
+ Stuxnet is in alignment with a series of new botnets using {\it
+   peer-to-peer} communication instead of a centralised server.
 
 This review paper focuses on these peer-to-peer botnets and the
 growing threat emerging from them. Having read this article, the
@@ -88,20 +88,24 @@ expect in the future.
 \section{Definitions}
 A computer able of executing commands remotely triggered by a
 malicious attacker and possibly against the will of the owner is
-called a {\it bot} or {\it zombie.} A {\it botnet} is a group of bots
-forming a common network structure.\cite{schoof2007detecting} In most
-recent papers on the subject (\cite{wang2009systematic},
-\cite{abu2006multifaceted}), the term botnet is defined as purely
-negative, i.e. a network performing destructive aims such as
-denial-of-service attacks\footnote{Abbreviated: DoS attacks,
-  i.e. generating so much traffic the target cannot function normally
-  any more}, sending spam or hosting a phishing
-website\cite{steggink2007detection}. Other common aims include
-providing the aggregated CPU resources of the botnet, stealing users'
-credentials \cite{borgaonkar2010analysis} or doing click
-fraud.\footnote{Click fraud is the process of generating clicks on web
-  banners without an actual user seeing or clicking the advertisement,
-  for the sake of making money.} on affiliate
+called a {\it bot} or {\it zombie.} The term can also generally refer
+to the program executed, meaning not a special instance of an infested
+computer, but the software or idea behind the software per se (as in
+``the Storm bot'').
+
+A {\it botnet} is a group of bots forming a common network
+structure.\cite{schoof2007detecting} In most recent papers on the
+subject (\cite{wang2009systematic}, \cite{abu2006multifaceted}), the
+term botnet is defined as purely negative, i.e. a network performing
+destructive aims such as denial-of-service
+attacks\footnote{Abbreviated: DoS attacks, i.e. generating so much
+  traffic the target cannot function normally any more}, sending spam
+or hosting a phishing website\cite{steggink2007detection}. Other
+common aims include providing the aggregated CPU resources of the
+botnet, stealing users' credentials \cite{borgaonkar2010analysis} or
+doing click fraud.\footnote{Click fraud is the process of generating
+  clicks on web banners without an actual user seeing or clicking the
+  advertisement, for the sake of making money.} on affiliate
 networks\cite{clickFraud}
 
 In the following, we use a bias-free definition of botnet as per
@@ -334,8 +338,8 @@ finally finds a peer which can offer the searched $k$, a direct
 connection between the two is established (peer-to-peer). Otherwise,
 if no $k$ can be found, the search will eventually hit the timeout and
 fail. From a botmaster's perspective, it makes sense to associate one
-command with a number of different $k$. In Stormnet for example the
-bots query for freshly generated keys every
+command with a number of different $k$. In Storm's botnet for example
+the bots query for freshly generated keys every
 day.\cite{wang2009systematic} The key to be queried by a single bot is
 calculated as a function of date (uniform for all bots) and a random
 number $\in [0;31]$ (varies between every bot) locally on every
@@ -846,7 +850,7 @@ attack''\cite{liang2006index}.
 
 Index-poising has been reported to have succeeded
 in fighting two recent P2P bots, namely Trojan.Peacomm and
-Stormnet. (\cite{grizzard2007peer}, \cite{liang2006index})
+Storm. (\cite{grizzard2007peer}, \cite{liang2006index})
 
 
 \subsubsection{A botmaster's counter-defence: Authentication of commands}
